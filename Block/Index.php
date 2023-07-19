@@ -10,7 +10,7 @@ class Index extends Template
 {
     public function getWelcomeText():string
     {
-        $welcomeText = "❤️Hello World❤️";
+        $welcomeText = "Hello World";
         return (string) __($welcomeText);
     }
 }
