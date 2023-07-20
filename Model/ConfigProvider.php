@@ -8,6 +8,7 @@ class ConfigProvider
 {
     public const XML_PATH_IS_WELCOME_TEXT = 'Study_Section/Study_Group/Study_Field';
     private ScopeConfigInterface $scopeConfig;
+
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;

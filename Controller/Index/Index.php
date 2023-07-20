@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Study\Mod1\Controller\Index;
 
@@ -16,7 +16,8 @@ class Index implements HttpGetActionInterface
 
     public function __construct(
         ResultFactory $resultFactory
-    ) {
+    )
+    {
         $this->resultFactory = $resultFactory;
     }
 

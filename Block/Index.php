@@ -21,7 +21,7 @@ class Index extends Template
     public function getWelcomeText(): string
     {
         $welcomeText = "Hello World";
-        return (string) $welcomeText;
+        return (string)$welcomeText;
     }
 
     public function isWelcomeTextEnabled(): bool
