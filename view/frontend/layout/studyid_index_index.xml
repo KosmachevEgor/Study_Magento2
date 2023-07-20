@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Study_Mod1::css/study.css"/>
     </head>
@@ -8,8 +9,9 @@
         <referenceContainer name="content">
             <container name="Study">
                 <block name="Study.hello" class="Study\Mod1\Block\Index" template="Study_Mod1::hello.phtml"/>
-                <block name="Study.form" class="Study\Mod1\Block\Form" template="Study_Mod1::form.phtml">
-                    <block name="Study.additional" class="Study\Mod1\Block\Form" template="Study_Mod1::additional.phtml"/>
+                <block name="Study.form" class="Study\Mod1\Block\Index" template="Study_Mod1::form.phtml">
+                    <block name="Study.additional" class="Study\Mod1\Block\Index"
+                           template="Study_Mod1::additional.phtml"/>
                 </block>
             </container>
         </referenceContainer>

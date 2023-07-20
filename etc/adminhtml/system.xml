@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="Study_Tab" translate="label" sortOrder="10">
+            <label>A meaningful label</label>
+        </tab>
+
+        <section id="Study_Section" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10" translate="label">
+            <label>A meaningful section label</label>
+            <tab>Study_Tab</tab>
+            <resource>Study_Mod1::config</resource>
+
+            <group id="Study_Group" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>A meaningful group label</label>
+                <comment>An additional comment helping users to understand the effect when configuring the fields defined in this group.</comment>
+
+                <field id="Study_Field" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

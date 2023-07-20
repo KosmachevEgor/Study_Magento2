@@ -1,9 +1,12 @@
 <?php
 /**
-* @var \Study\Mod1\Block\Index $block
-* @var \Magento\Framework\Escaper $escaper
-*/
+ * @var \Study\Mod1\Block\Index $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Study\Mod1\Model\ConfigProvider $configProvider
+ */
 ?>
-<div class="HelloWorld">
-<h><?= $escaper->escapeHtml(__($block->getWelcomeText()))?></h>
+<div class="hello-world-text">
+    <?php if ($block->isWelcomeTextEnabled()): ?>
+        <h><?= $escaper->escapeHtml(__($block->getWelcomeText())) ?></h>
+    <?php endif; ?>
 </div>
