@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Study\Mod1\Controller\Index;
 
@@ -23,7 +23,7 @@ class Index implements HttpGetActionInterface
     public function execute()
     {
         $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $page->getConfig()->setMetaTitle(__('THATS ALL'));
+        $page->getConfig()->setMetaTitle(__('THAT IS ALL'));
 
         return $page;
     }

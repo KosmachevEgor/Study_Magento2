@@ -5,8 +5,9 @@
  * @var \Study\Mod1\Model\ConfigProvider $configProvider
  */
 ?>
-<div class="hello-world-text">
-    <?php if ($block->isWelcomeTextEnabled()): ?>
-        <h><?= $escaper->escapeHtml(__($block->getWelcomeText())) ?></h>
-    <?php endif; ?>
-</div>
+
+<?php if ($block->isModuleEnabled()): ?>
+    <h1><?= $escaper->escapeHtml(__($block->getWelcomeText())) ?></h1>
+<?php else: ?>
+    <h1><?= $escaper->escapeHtml("This module is disabled. Enable it in config") ?></h1>
+<?php endif; ?>
