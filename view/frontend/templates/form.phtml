@@ -4,9 +4,12 @@
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
+
 <form class="input-form" method="post">
     <input type="text" name="sku"/>
-    <input type="number" name="qty"/>
+    <?php if ($block->isQtyEnabled()): ?>
+        <input type="number" name="qty" value="<?= $block->getQtyNumber() ?>"/>
+    <?php endif; ?>
     <?= $block->getChildHtml('Study.additional'); ?>
     <input type="submit" class="button-submit-data" "/>
 </form>

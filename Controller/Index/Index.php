@@ -16,15 +16,14 @@ class Index implements HttpGetActionInterface
 
     public function __construct(
         ResultFactory $resultFactory
-    )
-    {
+    ) {
         $this->resultFactory = $resultFactory;
     }
 
     public function execute()
     {
         $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $page->getConfig()->setMetaTitle(__('THATS ALL'));
+        $page->getConfig()->setMetaTitle(__('THAT IS ALL'));
 
         return $page;
     }

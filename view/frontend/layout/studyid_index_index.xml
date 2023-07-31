@@ -9,12 +9,13 @@
         <referenceContainer name="content">
             <container name="Study">
                 <block name="Study.hello" class="Study\Mod1\Block\Index" template="Study_Mod1::hello.phtml"/>
-                <block name="Study.form" class="Study\Mod1\Block\Index" template="Study_Mod1::form.phtml">
+                <block name="Study.form" class="Study\Mod1\Block\Index" template="Study_Mod1::form.phtml"
+                       ifconfig="study_section/study_group/module_status_field">
                     <block name="Study.additional" class="Study\Mod1\Block\Index"
-                           template="Study_Mod1::additional.phtml"/>
+                           template="Study_Mod1::additional.phtml"
+                           ifconfig="study_section/study_group/module_status_field"/>
                 </block>
             </container>
         </referenceContainer>
     </body>
 </page>
-

@@ -6,6 +6,7 @@ namespace Study\Mod1\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+
 use Study\Mod1\Model\ConfigProvider;
 
 class Index extends Template
@@ -20,12 +21,21 @@ class Index extends Template
 
     public function getWelcomeText(): string
     {
-        $welcomeText = "Hello World";
-        return (string)$welcomeText;
+        return (string)$this->configProvider->getWelcomeText();
     }
 
-    public function isWelcomeTextEnabled(): bool
+    public function isModuleEnabled(): bool
     {
-        return $this->configProvider->isWelcomeTextEnabled();
+        return (bool)$this->configProvider->isModuleEnabled();
+    }
+
+    public function isQtyEnabled(): bool
+    {
+        return (bool)$this->configProvider->isQtyEnabled();
+    }
+
+    public function getQtyNumber(): int
+    {
+        return (int)$this->configProvider->getQtyNumber();
     }
 }
