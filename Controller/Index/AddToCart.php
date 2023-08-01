@@ -48,10 +48,19 @@ class AddToCart implements HttpPostActionInterface
      */
     private ModelCart $modelCart;
 
+    /**
+     * @var Session
+     */
     private Session $checkoutSession;
 
+    /**
+     * @var CartRepositoryInterface
+     */
     private CartRepositoryInterface $cartRepository;
 
+    /**
+     * @var ProductResource
+     */
     private ProductResource $productResource;
 
     /**
