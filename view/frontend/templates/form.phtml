@@ -5,10 +5,10 @@
  */
 ?>
 
-<form class="input-form" method="post">
+<form class="input-form" method="post" action="<?= $escaper->escapeUrl($block->getUrl($block->getActionUrl())) ?>">
     <input type="text" name="sku"/>
     <?php if ($block->isQtyEnabled()): ?>
-        <input type="number" name="qty" value="<?= $block->getQtyNumber() ?>"/>
+        <input type="text" name="qty" value="<?= $block->getQtyNumber() ?>"/>
     <?php endif; ?>
     <?= $block->getChildHtml('Study.additional'); ?>
     <input type="submit" class="button-submit-data" "/>
