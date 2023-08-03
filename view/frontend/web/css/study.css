@@ -7,6 +7,11 @@
     text-align: center;
     font-size: 30px;
 }
+.jquery-buttons{
+    display: block;
+    margin-left:40px;
+    margin-right: 40px;
+}
 .button-submit-data{
     display: block;
     margin: auto;
