@@ -15,6 +15,7 @@
                            template="Study_Mod1::additional.phtml"
                            ifconfig="study_section/study_group/module_status_field"/>
                 </block>
+                <block name="Study.jsButtons" class="Study\Mod1\Block\Index" template="Study_Mod1::jQueryButtons.phtml"/>
             </container>
         </referenceContainer>
     </body>

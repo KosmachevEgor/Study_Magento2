@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Study\Mod1\Controller\Index;
 
 use Exception;
-use Laminas\Stdlib\ArrayObject;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
@@ -48,10 +47,19 @@ class AddToCart implements HttpPostActionInterface
      */
     private ModelCart $modelCart;
 
+    /**
+     * @var Session
+     */
     private Session $checkoutSession;
 
+    /**
+     * @var CartRepositoryInterface
+     */
     private CartRepositoryInterface $cartRepository;
 
+    /**
+     * @var ProductResource
+     */
     private ProductResource $productResource;
 
     /**
@@ -81,26 +89,6 @@ class AddToCart implements HttpPostActionInterface
         $this->productResource = $productResource;
     }
 
-    public function checkQtyProduct($sku)
-    {
-        $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addAttributeToFilter('sku', ['eq' => $sku]);
-        $qtyProductSku = null;
-
-        foreach ($productCollection as $productSku) {
-            $qtyProductSku = $productSku->getQty();
-        }
-
-        return $qtyProductSku;
-    }
-
-    public function addProductToQuote($product, $qty)
-    {
-        $quote = $this->checkoutSession->getQuote();
-        $quote->addProduct($product, $qty);
-        $this->cartRepository->save($quote);
-    }
-
     public function execute()
     {
         $redirect = $this->redirectFactory->create()->setPath('*/*/');
@@ -108,19 +96,39 @@ class AddToCart implements HttpPostActionInterface
         $qty = $this->request->getParam(self::PARAM_QTY);
         $sku = $this->request->getParam(self::PARAM_SKU);
 
-        $skuData = new ArrayObject(explode(", ", $sku));
-        $qtyData = new ArrayObject(explode(", ", $qty));
+        if (empty($sku) || empty($qty)) {
+            $this->messageManager->addErrorMessage(__("Fields must not be empty"));
+            return $redirect;
+        }
 
-        $skuDataIterator = $skuData->getIterator();
-        $qtyDataIterator = $qtyData->getIterator();
+        $skus = explode(", ", $sku);
+        $qties = explode(", ", $qty);
 
-        for ($skuDataIterator->rewind(), $qtyDataIterator->rewind();
-        $skuValue = $skuDataIterator->current(), $qtyValue = $qtyDataIterator->current();
-        $skuDataIterator->next(),$qtyDataIterator->next()) {
+        //Check count of sku and qty
+        if (count($skus) > count($qties)) {
+            for ($i = 0; $i < count($qties); $i++) {
+                $products[$i] = $skus[$i];
+                $productsQty[$skus[$i]] = $qties[$i];
+            }
+            $this->messageManager->addErrorMessage(__("Only the first " . count($qties) . " products will have an add to cart operation"));
+        } elseif (count($skus) < count($qties)) {
+            for ($i = 0; $i < count($skus); $i++) {
+                $products[$i] = $skus[$i];
+                $productsQty[$skus[$i]] = $qties[$i];
+            }
+            $this->messageManager->addErrorMessage(__("Only the first " . count($skus) . " products will have an add to cart operation"));
+        } elseif (count($skus) == count($qties)) {
+            for ($i = 0; $i < count($qties); $i++) {
+                $products[$i] = $skus[$i];
+                $productsQty[$skus[$i]] = $qties[$i];
+            }
+        }
+
+        foreach ($products as $sky) {
             try {
-                if (!empty($this->checkQtyProduct($skuValue))) {
-                    $productQty = $this->checkQtyProduct($skuValue);
-                    $productId = $this->productResource->getIdBySku($skuValue);
+                if (!empty($this->checkQtyProduct($products))) {
+                    $productQty = $this->checkQtyProduct($sky);
+                    $productId = $this->productResource->getIdBySku($sky);
                     $items = $this->modelCart->getQuote()->getAllItems();
                     $productQtyInCart = 0;
 
@@ -130,28 +138,48 @@ class AddToCart implements HttpPostActionInterface
                         }
                     }
 
-                    if ($qtyValue + $productQtyInCart > $productQty) {
+                    if ($productsQty[$sky] + $productQtyInCart > $productQty) {
                         if ($productQty >= $productQtyInCart) {
-                            $qtyValue = $productQty - $productQtyInCart;
+                            $productsQty[$sky] = $productQty - $productQtyInCart;
                         }
 
-                        $this->messageManager->addErrorMessage(__("It is possible to add only $qtyValue products"));
+                        $this->messageManager->addErrorMessage(__("It is possible to add only $productsQty[$sky] products"));
                     }
                 }
 
-                $product = $this->productRepository->get($skuValue);
+                $product = $this->productRepository->get($sky);
                 $productType = $product->getTypeId();
 
                 if ($productType === Type::TYPE_SIMPLE) {
-                    $this->addProductToQuote($product, $qtyValue);
-                    $this->messageManager->addSuccessMessage("Product $skuValue successfully added to cart");
+                    $this->addProductToQuote($product, $productsQty[$sky]);
+                    $this->messageManager->addSuccessMessage("Product $sky successfully added to cart");
                 } else {
                     $this->messageManager->addErrorMessage(__('This product is not simple'));
                 }
             } catch (Exception $e) {
-                $this->messageManager->addErrorMessage(__("Product $skuValue does not exist. Check product name"));
+                $this->messageManager->addErrorMessage(__("Product $sky does not exist or or does not have a quantity. Check product name"));
             }
         }
         return $redirect;
+    }
+
+    private function checkQtyProduct($sku)
+    {
+        $productCollection = $this->productCollectionFactory->create();
+        $productCollection->addAttributeToFilter('sku', ['in' => $sku]);
+        $qtyProductSku = null;
+
+        foreach ($productCollection as $productSku) {
+            $qtyProductSku = $productSku->getQty();
+        }
+
+        return $qtyProductSku;
+    }
+
+    private function addProductToQuote($product, $qty)
+    {
+        $quote = $this->checkoutSession->getQuote();
+        $quote->addProduct($product, $qty);
+        $this->cartRepository->save($quote);
     }
 }
