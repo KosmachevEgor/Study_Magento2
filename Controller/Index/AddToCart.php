@@ -68,16 +68,17 @@ class AddToCart implements HttpPostActionInterface
     protected CollectionFactory $productCollectionFactory;
 
     public function __construct(
-        RequestInterface $request,
-        RedirectFactory $redirectFactory,
-        ManagerInterface $messageManager,
+        RequestInterface           $request,
+        RedirectFactory            $redirectFactory,
+        ManagerInterface           $messageManager,
         ProductRepositoryInterface $productRepository,
-        CollectionFactory $productCollectionFactory,
-        ModelCart $modelCart,
-        Session $checkoutSession,
-        CartRepositoryInterface $cartRepository,
-        ProductResource $productResource
-    ) {
+        CollectionFactory          $productCollectionFactory,
+        ModelCart                  $modelCart,
+        Session                    $checkoutSession,
+        CartRepositoryInterface    $cartRepository,
+        ProductResource            $productResource
+    )
+    {
         $this->request = $request;
         $this->redirectFactory = $redirectFactory;
         $this->messageManager = $messageManager;
@@ -104,31 +105,20 @@ class AddToCart implements HttpPostActionInterface
         $skus = explode(", ", $sku);
         $qties = explode(", ", $qty);
 
-        //Check count of sku and qty
-        if (count($skus) > count($qties)) {
-            for ($i = 0; $i < count($qties); $i++) {
-                $products[$i] = $skus[$i];
-                $productsQty[$skus[$i]] = $qties[$i];
-            }
-            $this->messageManager->addErrorMessage(__("Only the first " . count($qties) . " products will have an add to cart operation"));
-        } elseif (count($skus) < count($qties)) {
+        if (count($skus) == count($qties)) {
             for ($i = 0; $i < count($skus); $i++) {
-                $products[$i] = $skus[$i];
-                $productsQty[$skus[$i]] = $qties[$i];
+                $products[$i] = [$skus[$i], $qties[$i]];
             }
-            $this->messageManager->addErrorMessage(__("Only the first " . count($skus) . " products will have an add to cart operation"));
-        } elseif (count($skus) == count($qties)) {
-            for ($i = 0; $i < count($qties); $i++) {
-                $products[$i] = $skus[$i];
-                $productsQty[$skus[$i]] = $qties[$i];
-            }
+        } else {
+            $this->messageManager->addErrorMessage(__("The quantity of the product does not match its quantity"));
+            return $redirect;
         }
 
-        foreach ($products as $sky) {
+        foreach ($products as [$productName, $qtyProduct]) {
             try {
                 if (!empty($this->checkQtyProduct($products))) {
-                    $productQty = $this->checkQtyProduct($sky);
-                    $productId = $this->productResource->getIdBySku($sky);
+                    $productQty = $this->checkQtyProduct($productName);
+                    $productId = $this->productResource->getIdBySku($productName);
                     $items = $this->modelCart->getQuote()->getAllItems();
                     $productQtyInCart = 0;
 
@@ -138,26 +128,26 @@ class AddToCart implements HttpPostActionInterface
                         }
                     }
 
-                    if ($productsQty[$sky] + $productQtyInCart > $productQty) {
+                    if ($qtyProduct + $productQtyInCart > $productQty) {
                         if ($productQty >= $productQtyInCart) {
-                            $productsQty[$sky] = $productQty - $productQtyInCart;
+                            $qtyProduct = $productQty - $productQtyInCart;
                         }
 
-                        $this->messageManager->addErrorMessage(__("It is possible to add only $productsQty[$sky] products"));
+                        $this->messageManager->addErrorMessage(__("It is possible to add only $qtyProduct products"));
                     }
                 }
 
-                $product = $this->productRepository->get($sky);
+                $product = $this->productRepository->get($productName);
                 $productType = $product->getTypeId();
 
                 if ($productType === Type::TYPE_SIMPLE) {
-                    $this->addProductToQuote($product, $productsQty[$sky]);
-                    $this->messageManager->addSuccessMessage("Product $sky successfully added to cart");
+                    $this->addProductToQuote($product, $qtyProduct);
+                    $this->messageManager->addSuccessMessage("Product $productName successfully added to cart");
                 } else {
                     $this->messageManager->addErrorMessage(__('This product is not simple'));
                 }
             } catch (Exception $e) {
-                $this->messageManager->addErrorMessage(__("Product $sky does not exist or or does not have a quantity. Check product name"));
+                $this->messageManager->addErrorMessage(__("Product $productName does not exist or or does not have a quantity. Check product name"));
             }
         }
         return $redirect;
