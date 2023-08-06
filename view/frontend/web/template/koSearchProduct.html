@@ -1,0 +1,9 @@
+<div>
+    <label for="search-input">Название продукта:</label>
+    <input type="text" name="sku" id="search-input" data-bind="textInput: searchText"/>
+    <div class="search-product-list">
+        <ul data-bind="foreach: searchResult">
+            <li data-bind="text: $data"></li>
+        </ul>
+    </div>
+</div>
