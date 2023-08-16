@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <study_section>
+            <study_group>
+                <module_Status_Field>1</module_Status_Field>
+                <qty_status_field>0</qty_status_field>
+                <welcome_text_Field>Hello my User</welcome_text_Field>
+                <default_qty_number>5</default_qty_number>
+            </study_group>
+        </study_section>
+    </default>
+</config>

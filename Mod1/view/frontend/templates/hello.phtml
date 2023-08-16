@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var \Study\Mod1\Block\Index $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Study\Mod1\Model\ConfigProvider $configProvider
+ */
+?>
+
+<?php if ($block->isModuleEnabled()): ?>
+    <h1><?= $escaper->escapeHtml(__($block->getWelcomeText())) ?></h1>
+<?php else: ?>
+    <h1><?= $escaper->escapeHtml("This module is disabled. Enable it in config") ?></h1>
+<?php endif; ?>
