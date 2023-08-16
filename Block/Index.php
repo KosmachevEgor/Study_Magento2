@@ -11,7 +11,7 @@ use Study\Mod1\Model\ConfigProvider;
 
 class Index extends Template
 {
-    public const SEARCH_URL = "study/index/addToCart";
+    public const FORM_ACTION = "study/index/addToCart";
     private ConfigProvider $configProvider;
 
     public function __construct(Context $context, ConfigProvider $configProvider, array $data = [])
@@ -40,8 +40,8 @@ class Index extends Template
         return (int)$this->configProvider->getQtyNumber();
     }
 
-    public function getActionUrl():string
+    public function getFormAction(): string
     {
-        return (string)self::SEARCH_URL;
+        return self::FORM_ACTION;
     }
 }
