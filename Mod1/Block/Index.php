@@ -6,7 +6,6 @@ namespace Study\Mod1\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-
 use Study\Mod1\Model\ConfigProvider;
 
 class Index extends Template

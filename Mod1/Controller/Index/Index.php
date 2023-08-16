@@ -23,7 +23,7 @@ class Index implements HttpGetActionInterface
     public function execute()
     {
         $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $page->getConfig()->setMetaTitle(__('THAT IS ALL'));
+        $page->getConfig()->setMetaTitle(__('MetaTitleExample'));
 
         return $page;
     }
