@@ -1,0 +1,32 @@
+.studyid-index-index{
+    border: solid 10px red;
+}
+.hello-world-text,.button-submit-data{
+    border: solid 5px pink;
+    margin: 10px 10px 5px 5px;
+    text-align: center;
+    font-size: 30px;
+}
+.jquery-buttons{
+    display: block;
+    margin-left:40px;
+    margin-right: 40px;
+}
+.button-submit-data{
+    display: block;
+    margin: auto;
+}
+.input-form{
+    display: block;
+    margin-left:40px;
+    margin-right: 40px;
+    border: solid 3px blue;
+}
+.form-timer{
+    display: block;
+    margin-left: 60px;
+    margin-right: 60px;
+    font-size: 30px;
+    border: solid 3px gray;
+    text-align: center;
+}

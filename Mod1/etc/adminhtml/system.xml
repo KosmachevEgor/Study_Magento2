@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="study_tab" translate="label" sortOrder="10">
+            <label>Study Module</label>
+        </tab>
+        <section id="study_section" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10"
+                 translate="label">
+            <label>Study Configuration</label>
+            <tab>study_tab</tab>
+            <resource>Study_Mod1::config</resource>
+            <group id="study_group" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Homework</label>
+                <field id="module_status_field" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" type="select">
+                    <label>Module Enabled:</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="welcome_text_field" translate="label" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" type="textarea">
+                    <label>WelcomeText:</label>
+                </field>
+                <field id="qty_status_field" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" type="select">
+                    <label>Qty Status:</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_qty_number" translate="label" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" type="textarea">
+                    <label>Qty:</label>
+                    <validate>validate-number</validate>
+                    <comment>If the field is left blank, the default value will be "0"</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
