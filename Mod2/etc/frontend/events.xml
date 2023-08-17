@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="add_to_cart">
+        <observer name="Study_mod2::promoSku"
+                  instance="Study\Mod2\Observer\PromoSkuObserver" />
+    </event>
+</config>
