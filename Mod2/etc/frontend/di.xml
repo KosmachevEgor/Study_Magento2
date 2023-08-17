@@ -5,13 +5,13 @@
     <type name="Magento\Checkout\Controller\Cart\Add">
         <plugin name="Study_Mod2::changeExecuteMethod"
                 type="Study\Mod2\Plugin\Checkout\Controller\Cart\Add\ExecutePlugin"
-                disabled="false"
+                disabled="true"
         />
     </type>
     <type name="Study\Mod1\Block\Index">
         <plugin name="Study_Mod2::changeFormActionMethod"
                 type="Study\Mod2\Plugin\Mod1\Block\Index\FormActionPlugin"
-                disabled="false"
+                disabled="true"
         />
     </type>
 </config>

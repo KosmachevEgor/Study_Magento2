@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Cart as ModelCart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -53,6 +54,11 @@ class AddToCart implements HttpPostActionInterface
     private Session $checkoutSession;
 
     /**
+     * @var EventManagerInterface
+     */
+    private EventManagerInterface $eventManager;
+
+    /**
      * @var CartRepositoryInterface
      */
     private CartRepositoryInterface $cartRepository;
@@ -76,7 +82,8 @@ class AddToCart implements HttpPostActionInterface
         ModelCart                  $modelCart,
         Session                    $checkoutSession,
         CartRepositoryInterface    $cartRepository,
-        ProductResource            $productResource
+        ProductResource            $productResource,
+        EventManagerInterface      $eventManager
     )
     {
         $this->request = $request;
@@ -87,6 +94,7 @@ class AddToCart implements HttpPostActionInterface
         $this->modelCart = $modelCart;
         $this->checkoutSession = $checkoutSession;
         $this->cartRepository = $cartRepository;
+        $this->eventManager = $eventManager;
         $this->productResource = $productResource;
     }
 
@@ -142,6 +150,12 @@ class AddToCart implements HttpPostActionInterface
 
                 if ($productType === Type::TYPE_SIMPLE) {
                     $this->addProductToQuote($product, $qtyProduct);
+                    $this->eventManager->dispatch(
+                        'add_to_cart',
+                        [
+                            'customer_sku' => $sku
+                        ]
+                    );
                     $this->messageManager->addSuccessMessage("Product $productName successfully added to cart");
                 } else {
                     $this->messageManager->addErrorMessage(__('This product is not simple'));

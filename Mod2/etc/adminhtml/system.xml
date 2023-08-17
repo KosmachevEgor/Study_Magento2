@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="study_mod2" translate="label" sortOrder="10">
+            <label>Study Mod2</label>
+        </tab>
+        <section id="studyMod2_config" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10"
+                 translate="label">
+            <label>Mod2 Config</label>
+            <tab>study_mod2</tab>
+            <resource>Study_Mod2::config</resource>
+            <group id="study_group2" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Homework5</label>
+                <field id="module_status_field" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" type="select">
+                    <label>Module Enabled:</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="forsku" translate="label" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" type="textarea">
+                    <label>For SKU:</label>
+                </field>
+                <field id="promosku" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" type="textarea">
+                    <label>Promo SKU:</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
