@@ -1,0 +1,12 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="study_egor_blacklist" resource="default" comment="Study blacklist for sku">
+        <column xsi:type="int" name="id" identity="true" unsigned="false" comment="Sku id"/>
+        <column xsi:type="varchar" name="sku" nullable="false" comment="Name of sku"/>
+        <column xsi:type="int" unsigned="false" name="qty" comment="Quantity of sku"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>

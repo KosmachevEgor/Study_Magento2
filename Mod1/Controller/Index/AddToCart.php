@@ -7,10 +7,10 @@ namespace Study\Mod1\Controller\Index;
 use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
+use Study\Mod1\Model\ResourceModel\Blacklist\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Checkout\Model\Cart as ModelCart;
-use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\SessionFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
@@ -49,9 +49,9 @@ class AddToCart implements HttpPostActionInterface
     private ModelCart $modelCart;
 
     /**
-     * @var Session
+     * @var SessionFactory
      */
-    private Session $checkoutSession;
+    private SessionFactory $checkoutSession;
 
     /**
      * @var EventManagerInterface
@@ -71,26 +71,25 @@ class AddToCart implements HttpPostActionInterface
     /**
      * @var CollectionFactory
      */
-    protected CollectionFactory $productCollectionFactory;
+    protected CollectionFactory $blacklistCollectionFactory;
 
     public function __construct(
         RequestInterface           $request,
         RedirectFactory            $redirectFactory,
         ManagerInterface           $messageManager,
         ProductRepositoryInterface $productRepository,
-        CollectionFactory          $productCollectionFactory,
+        CollectionFactory          $blacklistCollectionFactory,
         ModelCart                  $modelCart,
-        Session                    $checkoutSession,
+        SessionFactory             $checkoutSession,
         CartRepositoryInterface    $cartRepository,
         ProductResource            $productResource,
         EventManagerInterface      $eventManager
-    )
-    {
+    ) {
         $this->request = $request;
         $this->redirectFactory = $redirectFactory;
         $this->messageManager = $messageManager;
         $this->productRepository = $productRepository;
-        $this->productCollectionFactory = $productCollectionFactory;
+        $this->blacklistCollectionFactory = $blacklistCollectionFactory;
         $this->modelCart = $modelCart;
         $this->checkoutSession = $checkoutSession;
         $this->cartRepository = $cartRepository;
@@ -124,8 +123,8 @@ class AddToCart implements HttpPostActionInterface
 
         foreach ($products as [$productName, $qtyProduct]) {
             try {
-                if (!empty($this->checkQtyProduct($products))) {
-                    $productQty = $this->checkQtyProduct($productName);
+                if (!empty($this->checkBlacklistQtyProduct($products))) {
+                    $blacklistQty = $this->checkBlacklistQtyProduct($productName);
                     $productId = $this->productResource->getIdBySku($productName);
                     $items = $this->modelCart->getQuote()->getAllItems();
                     $productQtyInCart = 0;
@@ -136,9 +135,9 @@ class AddToCart implements HttpPostActionInterface
                         }
                     }
 
-                    if ($qtyProduct + $productQtyInCart > $productQty) {
-                        if ($productQty >= $productQtyInCart) {
-                            $qtyProduct = $productQty - $productQtyInCart;
+                    if ($qtyProduct + $productQtyInCart > $blacklistQty) {
+                        if ($blacklistQty >= $productQtyInCart) {
+                            $qtyProduct = $blacklistQty - $productQtyInCart;
                         }
 
                         $this->messageManager->addErrorMessage(__("It is possible to add only $qtyProduct products"));
@@ -167,22 +166,23 @@ class AddToCart implements HttpPostActionInterface
         return $redirect;
     }
 
-    private function checkQtyProduct($sku)
+    private function checkBlacklistQtyProduct($sku)
     {
-        $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addAttributeToFilter('sku', ['in' => $sku]);
-        $qtyProductSku = null;
+        $blacklistCollection = $this->blacklistCollectionFactory->create();
+        $blacklistCollection->addFieldToFilter('sku', ['in' => $sku]);
+        $qtyBlacklistSku = null;
 
-        foreach ($productCollection as $productSku) {
-            $qtyProductSku = $productSku->getQty();
+        foreach ($blacklistCollection as $productSku) {
+            $qtyBlacklistSku = $productSku->getQty();
         }
 
-        return $qtyProductSku;
+        return $qtyBlacklistSku;
     }
 
     private function addProductToQuote($product, $qty)
     {
-        $quote = $this->checkoutSession->getQuote();
+        $session = $this->checkoutSession->create();
+        $quote = $session->getQuote();
         $quote->addProduct($product, $qty);
         $this->cartRepository->save($quote);
     }
