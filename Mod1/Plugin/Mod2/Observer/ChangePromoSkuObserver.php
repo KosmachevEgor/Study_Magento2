@@ -20,7 +20,7 @@ class ChangePromoSkuObserver
 
     public function aroundExecute(PromoSkuObserver $subject, callable $proceed, Observer $observer)
     {
-        return $this->getRequest()->isXmlHttpRequest() ? null : $proceed($observer);
+        return $this->getRequest()->isAjax() ? null : $proceed($observer);
     }
 
     private function getRequest(): RequestInterface
