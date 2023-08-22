@@ -1,7 +1,7 @@
 define(['jquery'], function ($){
    var widgetMixin = {
        changeBorderColor: function () {
-           $(".studyid-index-index").find('.form-timer').css({'border': 'solid 10px #00edff'});
+           $(".studyid-index-index").find('.form-timer').css({'border': 'solid 2px #00edff'});
            this._super();
        }
    };

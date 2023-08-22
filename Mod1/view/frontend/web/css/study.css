@@ -1,8 +1,8 @@
 .studyid-index-index{
-    border: solid 10px red;
+    border: solid 2px red;
 }
 .hello-world-text,.button-submit-data{
-    border: solid 5px pink;
+    border: solid 2px pink;
     margin: 10px 10px 5px 5px;
     text-align: center;
     font-size: 30px;
@@ -27,6 +27,6 @@
     margin-left: 60px;
     margin-right: 60px;
     font-size: 30px;
-    border: solid 3px gray;
+    border: solid 2px gray;
     text-align: center;
 }

@@ -13,7 +13,7 @@ define(['jquery'], function ($) {
         },
         changeBorderColor: function () {
                 $(".studyid-index-index").css({'border': 'solid 10px #0A4B06FF'});
-                $(".input-form").css({'border': 'solid 10px #88189d'});
+                $(".input-form").css({'border': 'solid 2px #88189d'});
 
         }
     })
